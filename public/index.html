@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="/css/boot.css"></link>
 </head>
 <body>
 
   <div id="app">
-    <header>
-      <h1>{ site.title }</h1>
-      <nav>
-        <a href="#" rv-on-click="toHome | preventDefault">Home</a>
-        <a href="#" rv-on-click="toEvents | preventDefault">Events</a>
-      </nav>
+    <header class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+      <a href="/" class="navbar-brand">{ site.title }</a>
+      <ul class="nav navbar-nav">
+        <li><a href="#" rv-on-click="toHome | preventDefault">Home</a></li>
+        <li><a href="#" rv-on-click="toEvents | preventDefault">Events</a></li>
+      </ul>
+      </div>
     </header>
+    <div class="container">
     <div rv-widget="widgets.homePage"></div>
     <div rv-widget="widgets.eventsPage"></div>
+    </div>
   </div>
   
   <script src="/js/boot.js"></script>

@@ -6,10 +6,14 @@ module.exports = asWidget(function(hub) {
   var widget = this
 
   widget
-    .template('/modules/common/templates/home-page.html')
+    .template('/pages/home/home-page.html')
     .on('installed', function() {
       $.get('http://secularstates.wpengine.com/wp-json/posts', function(posts) {
         widget.set('posts', posts)
       })
     })
+
+   hub.on('enable:page', function(name) {
+   	 if (name === 'home') widget.start()
+   })
 })

@@ -143,10 +143,12 @@ var Widget = Backbone.Model.extend({
 
   start: fluent(function() {
     this.set('running', true)
+    this.show()
   }),
 
   stop: fluent(function() {
     this.set('running', false)
+    this.hide()
   }),
 
   enable: fluent(function() {
@@ -175,7 +177,11 @@ var Widget = Backbone.Model.extend({
 })
 
 module.exports = function(fn) {
-  var Factory = Widget.extend({ initialize: fn.bind(null, hub) })
+  var Factory = Widget.extend({ 
+    initialize: function() {
+      fn.call(this, hub)
+    }
+  })
   return function() { return new Factory }
 }
 

@@ -19435,58 +19435,6 @@ rivets.configure({
   }
 })
 
-rivets.binders['widget'] = {
-
-  'function': true,
-
-  bind: function(el) {
-    if (this.marker) return
-
-    this.marker = document.createComment('rivets: widget')
-   
-    var attr = [ this.view.config.prefix, this.type ].join('-').replace('--', '-')
-    el.removeAttribute(attr)
-
-    el.parentNode.insertBefore(this.marker, el)
-
-    el.setAttribute('rv-show', 'widget:visible')
-    el.setAttribute('rv-class-loading', 'widget:loading')
-  },
-
-  unbind: function(el) {
-    el.parentNode.removeChild(el)
-    if (this.widget.view) this.widget.view.unbind()
-    this.widget.uninstall()
-  },
-
-  routine: function(el, widgetFactory) {
-    var widget = widgetFactory()
-    if (this.widget) return
-
-    widget.on('change:enabled', function() {
-      if (!widget.get('enabled')) return this.unbind(el)
-
-      widget.ensureFragment(function(frag) {
-        el.innerHTML = ''
-        el.appendChild(frag.cloneNode(true))
-
-        var models = _.extend({}, this.view.models, { widget: widget })
-        var options = {
-          binders: this.view.binders,
-          formatters: this.view.formatters,
-          adapters: this.view.adapters,
-          config: this.view.config
-        }
-
-        widget.view = rivets.bind(el, models, options)
-        this.marker.parentNode.insertBefore(el, this.marker.nextSibling)
-      }.bind(this))
-    }, this)
-
-    this.widget = widget
-    widget.install(el)
-  }
-}
 
 
 },{"./../bower_components/lodash/dist/lodash.compat.js":4,"./../bower_components/rivets/dist/rivets.js":5}],9:[function(require,module,exports){
@@ -19496,6 +19444,7 @@ var Backbone = require("./../bower_components/backbone/backbone.js")
 var $ = require("./../bower_components/jquery/dist/jquery.js")
 var toast = require("./../bower_components/toast/src/toast.js")
 var hub = require('./hub')
+var rivets = require("./../bower_components/rivets/dist/rivets.js")
 
 function argsAsArray(args) {
   return _.flatten(_.toArray(args))
@@ -19521,8 +19470,62 @@ if (document && document.write) {
     if (content.indexOf('script') == 1) {
       Widget.prototype.assets(['//' + content.split('://')[1].split('.js')[0] + '.js'])
     } else {
-      console.log('SOMETHIGN tried to document.write somethign that wasnt a script... wtf?')
+      console.log('SOMETHING tried to document.write somethign that wasnt a script... wtf?')
     }
+  }
+}
+
+rivets.binders.widget = {
+
+  'function': true,
+
+  bind: function(el) {
+    if (this.marker) return
+
+    this.marker = document.createComment('rivets: widget')
+   
+    var attr = [ this.view.config.prefix, this.type ].join('-').replace('--', '-')
+    el.removeAttribute(attr)
+
+    el.parentNode.insertBefore(this.marker, el)
+
+    el.setAttribute('rv-show', 'widget:visible')
+    el.setAttribute('rv-class-loading', 'widget:loading')
+    el.setAttribute('rv-class-disabled', 'widget:disabled')
+  },
+
+  unbind: function(el) {
+    el.parentNode.removeChild(el)
+    if (this.widget.view) this.widget.view.unbind()
+    this.widget.uninstall()
+  },
+
+  routine: function(el, widgetFactory) {
+    var widget = widgetFactory()
+    if (this.widget) return
+
+    widget.on('change:running', function() {
+      if (!widget.get('running')) return this.unbind(el)
+
+      widget.ensureFragment(function(frag) {
+        el.innerHTML = ''
+        el.appendChild(frag.cloneNode(true))
+
+        var models = _.extend({}, this.view.models, { widget: widget })
+        var options = {
+          binders: this.view.binders,
+          formatters: this.view.formatters,
+          adapters: this.view.adapters,
+          config: this.view.config
+        }
+
+        widget.view = rivets.bind(el, models, options)
+        this.marker.parentNode.insertBefore(el, this.marker.nextSibling)
+      }.bind(this))
+    }, this)
+
+    this.widget = widget
+    widget.install(el)
   }
 }
 
@@ -19574,23 +19577,26 @@ var Widget = Backbone.Model.extend({
     })
   }),
 
-  assets: fluent(function(arr, name) {
-    var event = 'assets:loaded' + (name ? ':' + name : '')
-    toast.apply(null, arr.concat([ function() { this.trigger(event) }.bind(this) ]))
+  assets: fluent(function(arr, cb) {
+    toast(arr.concat(cb))
   }),
 
-  unique: function(key, val) {
-    hub.on('enable:' + key, function(name) {
-      name == val ? this.enable().show() : this.disable()
-    }, this)
-  },
+  start: fluent(function() {
+    this.set('running', true)
+    this.show()
+  }),
+
+  stop: fluent(function() {
+    this.set('running', false)
+    this.hide()
+  }),
 
   enable: fluent(function() {
-    this.set('enabled', true)
+    this.set('disabled', false)
   }),
 
   disable: fluent(function() {
-    this.set('enabled', false)
+    this.set('disabled', true)
   }),
 
   show: fluent(function() {
@@ -19611,37 +19617,44 @@ var Widget = Backbone.Model.extend({
 })
 
 module.exports = function(fn) {
-  var Factory = Widget.extend({ initialize: fn })
-  return function() {
-    return new Factory
-  }
+  var Factory = Widget.extend({ 
+    initialize: function() {
+      fn.call(this, hub)
+    }
+  })
+  return function() { return new Factory }
 }
 
 module.exports.Widget = Widget
 
-},{"./../bower_components/backbone/backbone.js":2,"./../bower_components/jquery/dist/jquery.js":3,"./../bower_components/lodash/dist/lodash.compat.js":4,"./../bower_components/toast/src/toast.js":6,"./hub":7}],10:[function(require,module,exports){
+},{"./../bower_components/backbone/backbone.js":2,"./../bower_components/jquery/dist/jquery.js":3,"./../bower_components/lodash/dist/lodash.compat.js":4,"./../bower_components/rivets/dist/rivets.js":5,"./../bower_components/toast/src/toast.js":6,"./hub":7}],10:[function(require,module,exports){
 
 var widget = require('../util/widget')
 
 module.exports = widget(function () {
-  this.unique('page', 'events')
   this.template('/modules/common/templates/events-page.html')
 })
 
 
 },{"../util/widget":9}],11:[function(require,module,exports){
 
-var widget = require('../util/widget')
+var asWidget = require('../util/widget')
 var $ = require("./../bower_components/jquery/dist/jquery.js")
 
-module.exports = widget(function() {
-  this.unique('page', 'home')
-  this.template('/modules/common/templates/home-page.html')
-  this.on('installed', function() {
-    $.get('http://secularstates.wpengine.com/wp-json/posts', function(posts) {
-      this.set('posts', posts)
-      }.bind(this))
-  }, this)
+module.exports = asWidget(function(hub) {
+  var widget = this
+
+  widget
+    .template('/pages/home/home-page.html')
+    .on('installed', function() {
+      $.get('http://secularstates.wpengine.com/wp-json/posts', function(posts) {
+        widget.set('posts', posts)
+      })
+    })
+
+   hub.on('enable:page', function(name) {
+   	 if (name === 'home') widget.start()
+   })
 })
 
 },{"../util/widget":9,"./../bower_components/jquery/dist/jquery.js":3}]},{},[1])
