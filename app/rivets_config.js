@@ -82,5 +82,3 @@ rivets.configure({
     this.call(binding.model, event, target, binding)
   }
 })
-
-

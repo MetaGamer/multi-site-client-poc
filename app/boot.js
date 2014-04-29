@@ -1,10 +1,11 @@
 
 var rivets = require('rivets')
-require('./util/rivets_config')
+require('./rivets_config')
+
 var Backbone = require('backbone')
 var $ = require('jquery')
 Backbone.$ = $
-var hub = require('./util/hub')
+var hub = require('widget').hub
 
 var homePage = require('./widgets/home_page')
 var eventsPage = require('./widgets/events_page')

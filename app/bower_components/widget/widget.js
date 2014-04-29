@@ -1,11 +1,14 @@
 
 var _ = require('lodash')
 var Backbone = require('backbone')
+var rivets = require('rivets')
 var $ = require('jquery')
 var toast = require('toast')
-var hub = require('./hub')
-var rivets = require('rivets')
 
+// this is the event hub that all modules will have access to
+var hub = _.extend({}, Backbone.Events)
+
+// here are some utilities
 function argsAsArray(args) {
   return _.flatten(_.toArray(args))
 }
@@ -23,18 +26,19 @@ function fluent(fn) {
   }
 }
 
-// hack hack-a-rooooooo
+// Properly handle scripts trying to be loaded by document.write()
 if (document && document.write) {
   var docWrite = document.write
   document.write = function(content) {
     if (content.indexOf('script') == 1) {
       Widget.prototype.assets(['//' + content.split('://')[1].split('.js')[0] + '.js'])
     } else {
-      console.log('SOMETHING tried to document.write somethign that wasnt a script... wtf?')
+      console.log('SOMEONE tried to document.write something that wasnt a script... wtf?')
     }
   }
 }
 
+// add widget binder to rivets.js
 rivets.binders.widget = {
 
   'function': true,
@@ -89,6 +93,7 @@ rivets.binders.widget = {
   }
 }
 
+// actual widget model
 var Widget = Backbone.Model.extend({
 
   _createFragment: function() {
@@ -176,6 +181,7 @@ var Widget = Backbone.Model.extend({
   })
 })
 
+// factory + API
 module.exports = function(fn) {
   var Factory = Widget.extend({ 
     initialize: function() {
@@ -186,3 +192,4 @@ module.exports = function(fn) {
 }
 
 module.exports.Widget = Widget
+module.exports.hub = hub

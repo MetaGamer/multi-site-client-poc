@@ -1,11 +1,12 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
 var rivets = require("./bower_components/rivets/dist/rivets.js")
-require('./util/rivets_config')
+require('./rivets_config')
+
 var Backbone = require("./bower_components/backbone/backbone.js")
 var $ = require("./bower_components/jquery/dist/jquery.js")
 Backbone.$ = $
-var hub = require('./util/hub')
+var hub = require("./bower_components/widget/widget.js").hub
 
 var homePage = require('./widgets/home_page')
 var eventsPage = require('./widgets/events_page')
@@ -33,7 +34,7 @@ router.route('', 'home', vm.toHome)
 router.route('/events', 'events', vm.toEvents)
 Backbone.history.start({ pushState: true })
 
-},{"./bower_components/backbone/backbone.js":2,"./bower_components/jquery/dist/jquery.js":3,"./bower_components/rivets/dist/rivets.js":5,"./util/hub":7,"./util/rivets_config":8,"./widgets/events_page":10,"./widgets/home_page":11}],2:[function(require,module,exports){
+},{"./bower_components/backbone/backbone.js":2,"./bower_components/jquery/dist/jquery.js":3,"./bower_components/rivets/dist/rivets.js":5,"./bower_components/widget/widget.js":7,"./rivets_config":8,"./widgets/events_page":9,"./widgets/home_page":10}],2:[function(require,module,exports){
 //     Backbone.js 1.1.2
 
 //     (c) 2010-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -19344,108 +19345,16 @@ return jQuery;
 
 },{}],7:[function(require,module,exports){
 
-var Backbone = require("./../bower_components/backbone/backbone.js")
-var _ = require("./../bower_components/lodash/dist/lodash.compat.js")
+var _ = require("./../lodash/dist/lodash.compat.js")
+var Backbone = require("./../backbone/backbone.js")
+var rivets = require("./../rivets/dist/rivets.js")
+var $ = require("./../jquery/dist/jquery.js")
+var toast = require("./../toast/src/toast.js")
 
-module.exports = _.extend({}, Backbone.Events)
+// this is the event hub that all modules will have access to
+var hub = _.extend({}, Backbone.Events)
 
-},{"./../bower_components/backbone/backbone.js":2,"./../bower_components/lodash/dist/lodash.compat.js":4}],8:[function(require,module,exports){
-var rivets = require("./../bower_components/rivets/dist/rivets.js")
-var _ = require("./../bower_components/lodash/dist/lodash.compat.js")
-
-rivets.adapters['.'] = {
-  subscribe: function(obj, keypath, callback) { },
-  unsubscribe: function(obj, keypath, callback) { },
-  read: function(obj, keypath) {
-    return obj[keypath]
-  },
-  publish: function(obj, keypath, value) {
-    obj[keypath] = value
-    return obj
-  }
-}
-
-rivets.adapters[':'] = {
-  subscribe: function(obj, keypath, callback) {
-    obj.on('change:' + keypath, callback)
-  },
-  unsubscribe: function(obj, keypath, callback) {
-    obj.off('change:' + keypath, callback)
-  },
-  read: function(obj, keypath) {
-    return obj.get(keypath)
-  },
-  publish: function(obj, keypath, value) {
-    obj.set(keypath, value)
-  }
-}
-
-rivets.formatters.last = function(arr) {
-  return _.last(arr)
-}
-
-rivets.formatters.models = function(coll) {
-  return coll.models
-}
-
-rivets.formatters.get = function(model, key) {
-  return model.get(key)
-}
-
-rivets.formatters.invert = function(a) {
-  return !a
-}
-
-rivets.formatters.ternary = function(cond, a, b) {
-  return cond ? a : b
-}
-
-rivets.formatters.eql = function(a, b) {
-  return a == b
-}
-
-rivets.formatters.confirm = function(fn) {
-  var words = [].slice.call(arguments, 1)
-  return function() {
-    var args = arguments
-    var self = this
-    var answer = confirm(words.join(' '))
-    if (answer) fn.apply(self, arguments)
-  }
-}
-
-rivets.formatters.count = function(arr) {
-  return (arr) ? (arr.length || 0) : 0
-}
-
-rivets.formatters.default = function(a, b) {
-  return a || b
-}
-
-rivets.formatters.preventDefault = function(fn) {
-  return function(e) {
-    e.preventDefault()
-    fn.apply(this, arguments)
-  }
-}
-
-rivets.configure({
-  handler: function(target, event, binding) {
-    this.call(binding.model, event, target, binding)
-  }
-})
-
-
-
-},{"./../bower_components/lodash/dist/lodash.compat.js":4,"./../bower_components/rivets/dist/rivets.js":5}],9:[function(require,module,exports){
-
-var _ = require("./../bower_components/lodash/dist/lodash.compat.js")
-var Backbone = require("./../bower_components/backbone/backbone.js")
-var $ = require("./../bower_components/jquery/dist/jquery.js")
-var toast = require("./../bower_components/toast/src/toast.js")
-var hub = require('./hub')
-var rivets = require("./../bower_components/rivets/dist/rivets.js")
-
+// here are some utilities
 function argsAsArray(args) {
   return _.flatten(_.toArray(args))
 }
@@ -19463,18 +19372,19 @@ function fluent(fn) {
   }
 }
 
-// hack hack-a-rooooooo
+// Properly handle scripts trying to be loaded by document.write()
 if (document && document.write) {
   var docWrite = document.write
   document.write = function(content) {
     if (content.indexOf('script') == 1) {
       Widget.prototype.assets(['//' + content.split('://')[1].split('.js')[0] + '.js'])
     } else {
-      console.log('SOMETHING tried to document.write somethign that wasnt a script... wtf?')
+      console.log('SOMEONE tried to document.write something that wasnt a script... wtf?')
     }
   }
 }
 
+// add widget binder to rivets.js
 rivets.binders.widget = {
 
   'function': true,
@@ -19529,6 +19439,7 @@ rivets.binders.widget = {
   }
 }
 
+// actual widget model
 var Widget = Backbone.Model.extend({
 
   _createFragment: function() {
@@ -19616,6 +19527,7 @@ var Widget = Backbone.Model.extend({
   })
 })
 
+// factory + API
 module.exports = function(fn) {
   var Factory = Widget.extend({ 
     initialize: function() {
@@ -19626,19 +19538,106 @@ module.exports = function(fn) {
 }
 
 module.exports.Widget = Widget
+module.exports.hub = hub
 
-},{"./../bower_components/backbone/backbone.js":2,"./../bower_components/jquery/dist/jquery.js":3,"./../bower_components/lodash/dist/lodash.compat.js":4,"./../bower_components/rivets/dist/rivets.js":5,"./../bower_components/toast/src/toast.js":6,"./hub":7}],10:[function(require,module,exports){
+},{"./../backbone/backbone.js":2,"./../jquery/dist/jquery.js":3,"./../lodash/dist/lodash.compat.js":4,"./../rivets/dist/rivets.js":5,"./../toast/src/toast.js":6}],8:[function(require,module,exports){
+var rivets = require("./bower_components/rivets/dist/rivets.js")
+var _ = require("./bower_components/lodash/dist/lodash.compat.js")
 
-var widget = require('../util/widget')
+rivets.adapters['.'] = {
+  subscribe: function(obj, keypath, callback) { },
+  unsubscribe: function(obj, keypath, callback) { },
+  read: function(obj, keypath) {
+    return obj[keypath]
+  },
+  publish: function(obj, keypath, value) {
+    obj[keypath] = value
+    return obj
+  }
+}
+
+rivets.adapters[':'] = {
+  subscribe: function(obj, keypath, callback) {
+    obj.on('change:' + keypath, callback)
+  },
+  unsubscribe: function(obj, keypath, callback) {
+    obj.off('change:' + keypath, callback)
+  },
+  read: function(obj, keypath) {
+    return obj.get(keypath)
+  },
+  publish: function(obj, keypath, value) {
+    obj.set(keypath, value)
+  }
+}
+
+rivets.formatters.last = function(arr) {
+  return _.last(arr)
+}
+
+rivets.formatters.models = function(coll) {
+  return coll.models
+}
+
+rivets.formatters.get = function(model, key) {
+  return model.get(key)
+}
+
+rivets.formatters.invert = function(a) {
+  return !a
+}
+
+rivets.formatters.ternary = function(cond, a, b) {
+  return cond ? a : b
+}
+
+rivets.formatters.eql = function(a, b) {
+  return a == b
+}
+
+rivets.formatters.confirm = function(fn) {
+  var words = [].slice.call(arguments, 1)
+  return function() {
+    var args = arguments
+    var self = this
+    var answer = confirm(words.join(' '))
+    if (answer) fn.apply(self, arguments)
+  }
+}
+
+rivets.formatters.count = function(arr) {
+  return (arr) ? (arr.length || 0) : 0
+}
+
+rivets.formatters.default = function(a, b) {
+  return a || b
+}
+
+rivets.formatters.preventDefault = function(fn) {
+  return function(e) {
+    e.preventDefault()
+    fn.apply(this, arguments)
+  }
+}
+
+rivets.configure({
+  handler: function(target, event, binding) {
+    this.call(binding.model, event, target, binding)
+  }
+})
+
+},{"./bower_components/lodash/dist/lodash.compat.js":4,"./bower_components/rivets/dist/rivets.js":5}],9:[function(require,module,exports){
+
+var widget = require("./../bower_components/widget/widget.js")
 
 module.exports = widget(function () {
   this.template('/modules/common/templates/events-page.html')
 })
 
 
-},{"../util/widget":9}],11:[function(require,module,exports){
+},{"./../bower_components/widget/widget.js":7}],10:[function(require,module,exports){
 
-var asWidget = require('../util/widget')
+var asWidget = require("./../bower_components/widget/widget.js")
 var $ = require("./../bower_components/jquery/dist/jquery.js")
 
 module.exports = asWidget(function(hub) {
@@ -19657,4 +19656,4 @@ module.exports = asWidget(function(hub) {
    })
 })
 
-},{"../util/widget":9,"./../bower_components/jquery/dist/jquery.js":3}]},{},[1])
+},{"./../bower_components/jquery/dist/jquery.js":3,"./../bower_components/widget/widget.js":7}]},{},[1])

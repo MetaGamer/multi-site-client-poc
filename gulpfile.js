@@ -59,3 +59,9 @@ gulp.task('watch', function() {
   gulp.watch('./app/**/*.js', [ 'buildJS' ])
   gulp.watch('./app/**/*.scss', [ 'buildCSS' ])
 })
+
+gulp.task('server', function() {
+  exec('static public', console.log)
+})
+
+gulp.task('dev', [ 'server', 'watch' ])

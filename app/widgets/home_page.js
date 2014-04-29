@@ -1,5 +1,5 @@
 
-var asWidget = require('../util/widget')
+var asWidget = require('widget')
 var $ = require('jquery')
 
 module.exports = asWidget(function(hub) {
