@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+  <div id="app">
+    <header>
+      <h1>{ site.title }</h1>
+      <nav>
+        <a href="#" rv-on-click="toHome | preventDefault">Home</a>
+        <a href="#" rv-on-click="toEvents | preventDefault">Events</a>
+      </nav>
+    </header>
+    <div rv-widget="widgets.homePage"></div>
+    <div rv-widget="widgets.eventsPage"></div>
+  </div>
+  
+  <script src="/js/boot.js"></script>
+</body>
+</html>
