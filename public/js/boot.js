@@ -8,16 +8,12 @@ var $ = require("./bower_components/jquery/dist/jquery.js")
 Backbone.$ = $
 var hub = require("./bower_components/widget/widget.js").hub
 
-var homePage = require('./widgets/home_page')
-var eventsPage = require('./widgets/events_page')
+require('./layouts/home_page/home_page_widget')
+require('./features/posts/widgets/post_list/widget')
 
 var vm = {
   site: {
     title: 'Multi Site POC'
-  },
-  widgets: {
-    homePage: homePage,
-    eventsPage: eventsPage
   },
   toHome: function() {
     hub.trigger('enable:page', 'home')
@@ -34,7 +30,7 @@ router.route('', 'home', vm.toHome)
 router.route('/events', 'events', vm.toEvents)
 Backbone.history.start({ pushState: true })
 
-},{"./bower_components/backbone/backbone.js":2,"./bower_components/jquery/dist/jquery.js":3,"./bower_components/rivets/dist/rivets.js":5,"./bower_components/widget/widget.js":7,"./rivets_config":8,"./widgets/events_page":9,"./widgets/home_page":10}],2:[function(require,module,exports){
+},{"./bower_components/backbone/backbone.js":2,"./bower_components/jquery/dist/jquery.js":3,"./bower_components/rivets/dist/rivets.js":5,"./bower_components/widget/widget.js":7,"./features/posts/widgets/post_list/widget":8,"./layouts/home_page/home_page_widget":9,"./rivets_config":10}],2:[function(require,module,exports){
 //     Backbone.js 1.1.2
 
 //     (c) 2010-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -19410,32 +19406,44 @@ rivets.binders.widget = {
     this.widget.uninstall()
   },
 
-  routine: function(el, widgetFactory) {
-    var widget = widgetFactory()
-    if (this.widget) return
+  routine: function(el) {
 
-    widget.on('change:running', function() {
-      if (!widget.get('running')) return this.unbind(el)
+    var run = function(el, widgetObj) {
+      var widget = widgetObj.factory()
+      if (this.widget) return
 
-      widget.ensureFragment(function(frag) {
-        el.innerHTML = ''
-        el.appendChild(frag.cloneNode(true))
+      var bind = function() {
+        widget.ensureFragment(function(frag) {
+          el.innerHTML = ''
+          el.appendChild(frag.cloneNode(true))
 
-        var models = _.extend({}, this.view.models, { widget: widget })
-        var options = {
-          binders: this.view.binders,
-          formatters: this.view.formatters,
-          adapters: this.view.adapters,
-          config: this.view.config
-        }
+          var models = _.extend({}, this.view.models, { widget: widget })
+          var options = {
+            binders: this.view.binders,
+            formatters: this.view.formatters,
+            adapters: this.view.adapters,
+            config: this.view.config
+          }
 
-        widget.view = rivets.bind(el, models, options)
-        this.marker.parentNode.insertBefore(el, this.marker.nextSibling)
-      }.bind(this))
-    }, this)
+          widget.view = rivets.bind(el, models, options)
+          this.marker.parentNode.insertBefore(el, this.marker.nextSibling)
+        }.bind(this))
+      }.bind(this)
 
-    this.widget = widget
-    widget.install(el)
+      widget.on('change:running', function() {
+        if (!widget.get('running')) return this.unbind(el)
+        bind()
+      }, this)
+
+      if (widget.get('running')) bind()
+
+      this.widget = widget
+      widget.install(el)
+    }.bind(this)
+
+    var name = el.getAttribute('data-widget-name')
+    if (!name) return
+    hub.trigger('widget:needed', name, run.bind(this, el))
   }
 }
 
@@ -19528,19 +19536,76 @@ var Widget = Backbone.Model.extend({
 })
 
 // factory + API
-module.exports = function(fn) {
-  var Factory = Widget.extend({ 
+module.exports = function(name, fn) {
+
+  var anon = !fn
+
+  if (anon) fn = name
+
+  var SubWidget = Widget.extend({ 
     initialize: function() {
       fn.call(this, hub)
     }
   })
-  return function() { return new Factory }
+
+  var factory = function() { return new SubWidget() }
+
+  if (!anon) {
+    hub.trigger('widget:defined', { name: name, factory: factory })
+  }
+
+  return factory
 }
+
+// store widgets
+var registery = {}
+hub.on('widget:defined', function(obj) { registery[obj.name] = obj })
+hub.on('widget:needed', function(name, cb) { cb(registery[name]) })
 
 module.exports.Widget = Widget
 module.exports.hub = hub
 
+
 },{"./../backbone/backbone.js":2,"./../jquery/dist/jquery.js":3,"./../lodash/dist/lodash.compat.js":4,"./../rivets/dist/rivets.js":5,"./../toast/src/toast.js":6}],8:[function(require,module,exports){
+
+var asWidget = require("./../../../../bower_components/widget/widget.js")
+var $ = require("./../../../../bower_components/jquery/dist/jquery.js")
+
+module.exports = asWidget('post-list', function(hub) {
+  var widget = this
+
+  widget
+    .template('/features/posts/widgets/post_list/template.html')
+    .on('installed', function() {
+      $.get('http://secularstates.wpengine.com/wp-json/posts', function(posts) {
+        widget.set('posts', posts)
+      })
+      widget.start()
+    })
+})
+
+},{"./../../../../bower_components/jquery/dist/jquery.js":3,"./../../../../bower_components/widget/widget.js":7}],9:[function(require,module,exports){
+
+var asWidget = require("./../../bower_components/widget/widget.js")
+var $ = require("./../../bower_components/jquery/dist/jquery.js")
+
+module.exports = asWidget('home-page', function(hub) {
+  var widget = this
+
+  widget
+    .template('/layouts/home_page/home_page.html')
+    .on('installed', function() {
+      $.get('http://secularstates.wpengine.com/wp-json/posts', function(posts) {
+        widget.set('posts', posts.map(function(post) { return function() { return list_item({ post: post }) } }))
+      })
+    })
+
+   hub.on('enable:page', function(name) {
+   	 (name === 'home') ? widget.start() : widget.stop()
+   })
+})
+
+},{"./../../bower_components/jquery/dist/jquery.js":3,"./../../bower_components/widget/widget.js":7}],10:[function(require,module,exports){
 var rivets = require("./bower_components/rivets/dist/rivets.js")
 var _ = require("./bower_components/lodash/dist/lodash.compat.js")
 
@@ -19626,34 +19691,4 @@ rivets.configure({
   }
 })
 
-},{"./bower_components/lodash/dist/lodash.compat.js":4,"./bower_components/rivets/dist/rivets.js":5}],9:[function(require,module,exports){
-
-var widget = require("./../bower_components/widget/widget.js")
-
-module.exports = widget(function () {
-  this.template('/modules/common/templates/events-page.html')
-})
-
-
-},{"./../bower_components/widget/widget.js":7}],10:[function(require,module,exports){
-
-var asWidget = require("./../bower_components/widget/widget.js")
-var $ = require("./../bower_components/jquery/dist/jquery.js")
-
-module.exports = asWidget(function(hub) {
-  var widget = this
-
-  widget
-    .template('/pages/home/home-page.html')
-    .on('installed', function() {
-      $.get('http://secularstates.wpengine.com/wp-json/posts', function(posts) {
-        widget.set('posts', posts)
-      })
-    })
-
-   hub.on('enable:page', function(name) {
-   	 if (name === 'home') widget.start()
-   })
-})
-
-},{"./../bower_components/jquery/dist/jquery.js":3,"./../bower_components/widget/widget.js":7}]},{},[1])
+},{"./bower_components/lodash/dist/lodash.compat.js":4,"./bower_components/rivets/dist/rivets.js":5}]},{},[1])

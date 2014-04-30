@@ -1,6 +1,7 @@
 
 var gulp = require('gulp')
 var gutil = require('gulp-util')
+var plumber = require('gulp-plumber')
 var exec = require('child_process').exec
 var sass = require('gulp-sass')
 var browserify = require('browserify')
@@ -28,6 +29,10 @@ gulp.task('buildCSS', function () {
     .pipe(gulp.dest('./public/css'))
 });
 
+gulp.task('buildHTML', function() {
+  gulp.src('./app/**/*.html')
+      .pipe(gulp.dest('./public'))
+})
 
 gulp.task('buildJS', function() {
 
@@ -58,6 +63,7 @@ gulp.task('buildJS', function() {
 gulp.task('watch', function() {
   gulp.watch('./app/**/*.js', [ 'buildJS' ])
   gulp.watch('./app/**/*.scss', [ 'buildCSS' ])
+  gulp.watch('./app/**/*.html', [ 'buildHTML' ])
 })
 
 gulp.task('server', function() {

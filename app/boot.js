@@ -7,16 +7,12 @@ var $ = require('jquery')
 Backbone.$ = $
 var hub = require('widget').hub
 
-var homePage = require('./widgets/home_page')
-var eventsPage = require('./widgets/events_page')
+require('./layouts/home_page/home_page_widget')
+require('./features/posts/widgets/post_list/widget')
 
 var vm = {
   site: {
     title: 'Multi Site POC'
-  },
-  widgets: {
-    homePage: homePage,
-    eventsPage: eventsPage
   },
   toHome: function() {
     hub.trigger('enable:page', 'home')

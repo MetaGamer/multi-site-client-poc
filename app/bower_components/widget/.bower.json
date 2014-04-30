@@ -13,14 +13,13 @@
     "test",
     "tests"
   ],
-  "_release": "8e1c2d8e1f",
+  "_release": "fabe5844a2",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "8e1c2d8e1fa0700a7bfd7db6fd01f6c1942e4e39"
+    "commit": "fabe5844a2f6d76411f99758ec9257c67e972320"
   },
   "_source": "/Users/bbarr/web/widget",
   "_target": "*",
-  "_originalSource": "../../widget",
-  "_direct": true
+  "_originalSource": "../../widget"
 }
