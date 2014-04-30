@@ -7,8 +7,8 @@ var $ = require('jquery')
 Backbone.$ = $
 var hub = require('widget').hub
 
-require('./layouts/home_page/home_page_widget')
-require('./features/posts/widgets/post_list/widget')
+// keep this hacky comment block...
+// require all widgets
 
 var vm = {
   site: {

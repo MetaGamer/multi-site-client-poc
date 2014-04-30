@@ -1,6 +1,7 @@
 
 var gulp = require('gulp')
 var gutil = require('gulp-util')
+var glob = require('glob')
 var exec = require('child_process').exec
 var sass = require('gulp-sass')
 var browserify = require('browserify')
@@ -35,28 +36,40 @@ gulp.task('buildHTML', function() {
 
 gulp.task('buildJS', function() {
 
-  browserify('./app/boot.js')
+  glob('./app/**/*widget.js', function(e, widgets) {
 
-    // use lodash instead of underscore
-    .transform(function() {
-      var data = ''
-      return through(function(b) { data += b }, function() {
-        this.queue(data.replace(/underscore/g, 'lodash'))
-        this.queue(null)
+    browserify('./app/boot.js')
+
+      // use lodash instead of underscore
+      .transform(function() {
+        var data = ''
+        var widgetRequires = widgets
+          .filter(function(widget) {
+            return widget.indexOf('bower_components') == -1
+          }).map(function(widget) {
+            return "require('" + widget.replace('/app', '') + "');"
+          }).join('')
+        return through(function(b) { data += b }, function() {
+          var replaced = data
+            .replace(/underscore/g, 'lodash')
+            .replace('// require all widgets', widgetRequires)
+          this.queue(replaced)
+          this.queue(null)
+        })
       })
-    })
 
-    // search for modules in public/bower_components
-    .transform(debowerify)
+      // search for modules in public/bower_components
+      .transform(debowerify)
 
-    // returns read stream
-    .bundle()
+      // returns read stream
+      .bundle({ debug: true })
 
-    // turns browserify stream into stream that return vinyl file object... weird, but whatever
-    .pipe(source('boot.js'))
+      // turns browserify stream into stream that return vinyl file object... weird, but whatever
+      .pipe(source('boot.js'))
 
-    // put to file!!
-    .pipe(gulp.dest('./public/js'))
+      // put to file!!
+      .pipe(gulp.dest('./public/js'))
+  })
 })
 
 var skipMatcher = '!./app/{bower_components,bower_components/**}'

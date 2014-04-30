@@ -1,5 +1,6 @@
 
 var asWidget = require('widget')
+var posts = require('../../data')
 var $ = require('jquery')
 
 module.exports = asWidget('post-list', function(hub) {
@@ -8,9 +9,7 @@ module.exports = asWidget('post-list', function(hub) {
   widget
     .template('/features/posts/widgets/post_list/template.html')
     .on('installed', function() {
-      $.get('http://secularstates.wpengine.com/wp-json/posts', function(posts) {
-        widget.set('posts', posts)
-      })
+      posts.fetch().then(widget.set.bind(widget, 'posts'))
       widget.start()
     })
 })
