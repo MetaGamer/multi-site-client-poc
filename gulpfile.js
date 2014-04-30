@@ -1,7 +1,6 @@
 
 var gulp = require('gulp')
 var gutil = require('gulp-util')
-var plumber = require('gulp-plumber')
 var exec = require('child_process').exec
 var sass = require('gulp-sass')
 var browserify = require('browserify')
@@ -24,13 +23,13 @@ gulp.task('test:features', function() {
 })
 
 gulp.task('buildCSS', function () {
-  gulp.src('./app/boot.scss')
+  gulp.src([ './app/boot.scss' ])
     .pipe(sass())
     .pipe(gulp.dest('./public/css'))
 });
 
 gulp.task('buildHTML', function() {
-  gulp.src('./app/**/*.html')
+  gulp.src([ './app/**/*.html', skipMatcher ])
       .pipe(gulp.dest('./public'))
 })
 
@@ -60,10 +59,12 @@ gulp.task('buildJS', function() {
     .pipe(gulp.dest('./public/js'))
 })
 
+var skipMatcher = '!./app/{bower_components,bower_components/**}'
+
 gulp.task('watch', function() {
-  gulp.watch('./app/**/*.js', [ 'buildJS' ])
-  gulp.watch('./app/**/*.scss', [ 'buildCSS' ])
-  gulp.watch('./app/**/*.html', [ 'buildHTML' ])
+  gulp.watch([ './app/**/*.js', skipMatcher], [ 'buildJS' ])
+  gulp.watch([ './app/**/*.scss', skipMatcher], [ 'buildCSS' ])
+  gulp.watch([ './app/**/*.html', skipMatcher], [ 'buildHTML' ])
 })
 
 gulp.task('server', function() {
@@ -71,3 +72,4 @@ gulp.task('server', function() {
 })
 
 gulp.task('dev', [ 'server', 'watch' ])
+
