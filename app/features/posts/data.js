@@ -1,5 +1,6 @@
 
 var rsvp = require('rsvp')
+var $ = require('jquery')
 
 module.exports = {
 
