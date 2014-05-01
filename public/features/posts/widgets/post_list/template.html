@@ -1,6 +1,11 @@
-<h2>News</h2>
-<ul>
-  <li rv-each-post="widget:posts">
-    <h3>{ post.title }</h3>
+<ul class="posts-list">
+  <li class="post-item" rv-each-post="widget:posts">
+    <h3><a href="#" rv-on-click="post.select | preventDefault">{ post:title }</a></h3>
+    <ul class="meta">
+      <li><img rv-src="post:author.avatar" /> { post:author.name }</li>
+      <li>{ post:date | prettyDate }</li>
+      <li>{ post:comments | count }</li>
+    </ul>
+	  <p class="post-content" rv-html="post:content"></p>
   </li>
 </ul>

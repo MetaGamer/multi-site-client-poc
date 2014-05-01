@@ -4,19 +4,30 @@
 <link rel="stylesheet" href="/css/boot.css"></link>
 </head>
 <body>
+  
 
   <div id="app">
-    <header class="navbar navbar-inverse navbar-fixed-top">
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
-      <a href="/" class="navbar-brand">{ site.title }</a>
-      <ul class="nav navbar-nav">
-        <li><a href="#" rv-on-click="toHome | preventDefault">Home</a></li>
-        <li><a href="#" rv-on-click="toEvents | preventDefault">Events</a></li>
-      </ul>
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">State Name</a>
+        </div>
+
+        <ul class="nav navbar-nav">
+          <li class="active"><a rv-on-click="toHome | preventDefault" href="#">Home</a></li>
+          <li><a rv-on-click="toAbout | preventDefault" href="#">About</a></li>
+          <li><a rv-on-click="toEvents | preventDefault" href="#">Events</a></li>
+        </ul>
+
       </div>
-    </header>
-    <div class="container">
+    </nav>
+
+
+    <div class="page container">
       <div rv-widget data-widget-name="home-page"></div>
+      <div rv-widget data-widget-name="events-page"></div>
+      <div rv-widget data-widget-name="article-page"></div>
     </div>
   </div>
   

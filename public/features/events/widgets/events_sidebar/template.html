@@ -1,1 +1,16 @@
-events
+<span class="events-widget-title">Upcoming Events</span>
+<ul class="events-widget upcoming">
+  <li class="row event-item" rv-each-event="widget:events">
+    <div class="event-header">
+      <div class="col-xs-2 date-box">
+        <p class="date">{ event.date | justDate }</p>
+        <p class="month">{ event.date | justMonth }</p>
+      </div>
+      <div class="col-xs-10 event-details">
+        <a href="#" target="_blank" class="event-title"><h4>{ event.title }</h4></a>
+        <p class="event-date">{ event | eventTime }</p>
+      </div>
+      <p class="event-location">{ event.venue }</p>
+    </div>
+  </li>
+</ul>

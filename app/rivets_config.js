@@ -1,5 +1,6 @@
 var rivets = require('rivets')
 var _ = require('lodash')
+var moment = require('moment')
 
 rivets.adapters['.'] = {
   subscribe: function(obj, keypath, callback) { },
@@ -26,6 +27,38 @@ rivets.adapters[':'] = {
   publish: function(obj, keypath, value) {
     obj.set(keypath, value)
   }
+}
+
+rivets.formatters.maybe = function(obj, key) {
+  if (obj) {
+    return obj[key]
+  }
+}
+
+rivets.formatters.prefix = function(a, b) {
+  return b + '' + a
+}
+
+rivets.formatters.prettyDate = function(date) {
+  return moment(date).format('MMMM Do YYYY, h:mm:ss a')
+}
+
+rivets.formatters.justDate = function(date) {
+  return moment(date).format('D')
+}
+
+rivets.formatters.justMonth = function(date) {
+  return moment(date).format('MMMM')
+}
+
+rivets.formatters.eventTime = function(event) {
+  var txt = moment(event.date).format('dddd, MMMM Do, ')
+  var hasTime = event.post_meta.fc_start_datetime
+  if (hasTime) {
+    txt += moment(event.post_meta.fc_start_datetime[0]).format('h:mmA - ')
+    txt += moment(event.post_meta.fc_end_datetime[0]).format('h:mmA')
+  }
+  return txt
 }
 
 rivets.formatters.last = function(arr) {

@@ -9,7 +9,11 @@ module.exports = asWidget('post-list', function(hub) {
   widget
     .template('/features/posts/widgets/post_list/template.html')
     .on('installed', function() {
-      posts.fetch().then(widget.set.bind(widget, 'posts'))
+      posts.ensure()
       widget.start()
     })
+
+  hub.on('posts:loaded', function(data) {
+    widget.set('posts', data)
+  })
 })

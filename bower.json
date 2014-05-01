@@ -20,6 +20,7 @@
     "backbone": "~1.1.2",
     "jquery": "~2.1.0",
     "toast": "~1.2.2",
-    "widget": "../../widget"
+    "widget": "../../widget",
+    "moment": "~2.6.0"
   }
 }
