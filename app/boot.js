@@ -8,6 +8,12 @@ Backbone.$ = $
 var hub = require('widget').hub
 window.hub = hub
 
+$.ajaxSetup({
+  xhrFields: {
+    withCredentials: true
+  }
+})
+
 // keep the hacky comment block below.. Browserify will embed all 
 // disconnected widget scripts here:
 
@@ -47,12 +53,17 @@ var vm = {
 
 hub.on('article:selected', vm.toArticle)
 
+vm.user.set('loading', true)
+
 hub.trigger('user:check')
+
 hub.on('user:login:error', function() {
   vm.user.set('loggedIn', false)
+  vm.user.set('loading', false)
 })
 hub.on('user:loggedIn', function() {
   vm.user.set('loggedIn', true)
+  vm.user.set('loading', false)
 })
 
 rivets.bind(document.getElementById('app'), vm)

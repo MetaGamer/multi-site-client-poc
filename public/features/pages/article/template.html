@@ -1,5 +1,5 @@
 
-<div class="row hero"> </div>
+<div class="row hero"> asdfasdf </div>
 
 <div class="row">
   <div class="col-xs-10 col-xs-offset-1 main-col">
@@ -14,11 +14,5 @@
     <p class="post-content" rv-html="widget:post:content"></p>
   </div>
 
-  <ul class="col-xs-12">
-    <li rv-each-comment="widget:post:comments">
-      <p rv-html="comment.content">
-      <span>{ comment.author.name }</span>
-    </li>
-  </ul>
-
+  <div class="col-xs-12" rv-widget data-widget-name="comment-list"></div>
 </div>

@@ -21,6 +21,7 @@
     "jquery": "~2.1.0",
     "toast": "~1.2.2",
     "widget": "../../widget",
-    "moment": "~2.6.0"
+    "moment": "~2.6.0",
+    "font-awesome": "~4.0.3"
   }
 }

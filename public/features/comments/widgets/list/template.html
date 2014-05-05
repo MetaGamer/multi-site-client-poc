@@ -1,0 +1,28 @@
+
+<div class="comments">
+
+  <h3><i class="fa fa-comments"></i> Comments <small> 10</small></h3>
+
+  <ul class="comment-list">
+    <li rv-each-comment="widget:comments" class="comment">
+      <a class="pull-left" href="#">
+        <img class="comment-object" src="http://placehold.it/64x64">
+      </a>
+      <div class="comment-body">{ comment.content }</div>
+      <ul class="meta">
+        <li><img rv-src="comment.author.avatar">{ comment.author.name }</li>
+        <li><i class="fa fa-clock-o"></i> { comment.date | prettyDate }</li>
+        <li><a href="#"><i class="fa fa-link"></i> { comment.meta.links.self }</a></li>
+      </ul>
+    </li>
+  </ul>
+  <form rv-on-submit="widget.comment | preventDefault">
+    <div class="input-group">
+      <input type="text" rv-value="widget:newComment" class="form-control" placeholder="Add a comment..">
+      <div class="input-group-btn">
+        <button type="submit" class="btn btn-default"><i class="fa fa-comment"></i></button>
+      </div>
+    </div>
+  </form>	
+
+</div>
