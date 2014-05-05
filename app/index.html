@@ -20,6 +20,12 @@
           <li><a rv-on-click="toEvents | preventDefault" href="#">Events</a></li>
         </ul>
 
+        <ul class="nav navbar-nav navbar-right">
+          <li rv-hide="user:loggedIn"><button type="button" rv-on-click="showLogin | preventDefault" class="btn btn-success navbar-btn pull-right">Log in</button></li>
+          <li rv-hide="user:loggedIn"><a rv-on-click="showRegister | preventDefault" href="#">Register</a></li>
+          <li rv-show="user:loggedIn"><button class="btn btn-success navbar-btn pull-right" type="button" rv-on-click="logout | preventDefault">Log out</button></li>
+        </ul>
+
       </div>
     </nav>
 
@@ -29,7 +35,12 @@
       <div rv-widget data-widget-name="events-page"></div>
       <div rv-widget data-widget-name="article-page"></div>
     </div>
+
+    <div rv-widget data-widget-name="register-modal"></div>
+    <div rv-widget data-widget-name="login-modal"></div>
   </div>
+
+  
   
   <script src="/js/boot.js"></script>
 </body>

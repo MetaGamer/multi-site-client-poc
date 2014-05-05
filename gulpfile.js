@@ -36,7 +36,7 @@ gulp.task('buildHTML', function() {
 
 gulp.task('buildJS', function() {
 
-  glob('./app/**/*widget.js', function(e, widgets) {
+  glob('./app/**/*.req.js', function(e, widgets) {
 
     browserify('./app/boot.js')
 
@@ -44,9 +44,7 @@ gulp.task('buildJS', function() {
       .transform(function() {
         var data = ''
         var widgetRequires = widgets
-          .filter(function(widget) {
-            return widget.indexOf('bower_components') == -1
-          }).map(function(widget) {
+          .map(function(widget) {
             return "require('" + widget.replace('/app', '') + "');"
           }).join('')
         return through(function(b) { data += b }, function() {

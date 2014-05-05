@@ -7,7 +7,7 @@ function broadcast() {
   hub.trigger('events:loaded', cache)
 }
 
-module.exports = {
+var events = {
 
   fetch: function() {
     $.get('http://secularstates.wpengine.com/wp-json/posts?type=events', function(events) {
@@ -21,3 +21,7 @@ module.exports = {
     else this.fetch()
   }
 }
+
+hub.on('events:needed', events.ensure, events)
+
+module.exports = events

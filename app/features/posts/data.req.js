@@ -9,14 +9,9 @@ function broadcast() {
   hub.trigger('posts:loaded', cache)
 }
 
-var Post = Backbone.Model.extend({
+var Post = Backbone.Model.extend({ })
 
-  select: function() {
-    hub.trigger('selectArticle', this)
-  }
-})
-
-module.exports = {
+var posts = {
 
   fetch: function() {
     return new rsvp.Promise(function(res, rej) {
@@ -38,3 +33,8 @@ module.exports = {
     else this.fetch()
   }
 }
+
+hub.on('posts:needed', posts.ensure, posts) 
+
+module.exports = posts
+

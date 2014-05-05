@@ -6,8 +6,11 @@ var Backbone = require('backbone')
 var $ = require('jquery')
 Backbone.$ = $
 var hub = require('widget').hub
+window.hub = hub
 
-// keep this hacky comment block...
+// keep the hacky comment block below.. Browserify will embed all 
+// disconnected widget scripts here:
+
 // require all widgets
 
 var vm = {
@@ -27,13 +30,29 @@ var vm = {
     router.navigate('/events')
   },
   toArticle: function(article) {
-    hub.trigger('enable:page', 'article', article)
+    hub.trigger('enable:page', 'article')
+    router.navigate('/articles/' + article.get('slug'))
+  },
+  showLogin: function() {
+    hub.trigger('modal:login')
+  },
+  showRegister: function() {
+    hub.trigger('modal:register')
+  },
+  user: new Backbone.Model,
+  logout: function() {
+    hub.trigger('user:logout')
   }
 }
 
-hub.on('selectArticle', function(article) {
-  vm.toArticle(article)
-  router.navigate('/articles/' + article.get('slug'))
+hub.on('article:selected', vm.toArticle)
+
+hub.trigger('user:check')
+hub.on('user:login:error', function() {
+  vm.user.set('loggedIn', false)
+})
+hub.on('user:loggedIn', function() {
+  vm.user.set('loggedIn', true)
 })
 
 rivets.bind(document.getElementById('app'), vm)

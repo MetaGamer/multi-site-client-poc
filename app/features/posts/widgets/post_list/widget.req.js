@@ -1,7 +1,5 @@
 
 var asWidget = require('widget')
-var posts = require('../../data')
-var $ = require('jquery')
 
 module.exports = asWidget('post-list', function(hub) {
   var widget = this
@@ -9,9 +7,15 @@ module.exports = asWidget('post-list', function(hub) {
   widget
     .template('/features/posts/widgets/post_list/template.html')
     .on('installed', function() {
-      posts.ensure()
+      hub.trigger('posts:needed')
       widget.start()
     })
+
+  widget.selectArticle = function(_, _, binding) {
+    // yuck.
+    var post = binding.view.models.post
+    hub.trigger('article:selected', post)
+  }
 
   hub.on('posts:loaded', function(data) {
     widget.set('posts', data)

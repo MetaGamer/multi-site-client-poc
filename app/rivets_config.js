@@ -53,7 +53,7 @@ rivets.formatters.justMonth = function(date) {
 
 rivets.formatters.eventTime = function(event) {
   var txt = moment(event.date).format('dddd, MMMM Do, ')
-  var hasTime = event.post_meta.fc_start_datetime
+  var hasTime = event.post_meta && event.post_meta.fc_start_datetime
   if (hasTime) {
     txt += moment(event.post_meta.fc_start_datetime[0]).format('h:mmA - ')
     txt += moment(event.post_meta.fc_end_datetime[0]).format('h:mmA')

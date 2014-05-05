@@ -1,6 +1,6 @@
 <ul class="posts-list">
   <li class="post-item" rv-each-post="widget:posts">
-    <h3><a href="#" rv-on-click="post.select | preventDefault">{ post:title }</a></h3>
+    <h3><a href="#" rv-on-click="widget.selectArticle | preventDefault">{ post:title }</a></h3>
     <ul class="meta">
       <li><img rv-src="post:author.avatar" /> { post:author.name }</li>
       <li>{ post:date | prettyDate }</li>

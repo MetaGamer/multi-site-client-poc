@@ -1,15 +1,14 @@
 
 var asWidget = require('widget')
-var events = require('../../features/events/data')
 
 module.exports = asWidget('events-page', function(hub) {
   var widget = this
 
   widget
-    .template('/layouts/events_page/template.html')
+    .template('/features/pages/events/template.html')
     .on('installed', function() {
       if (!widget.get('events')) {
-        events.ensure()
+        hub.trigger('events:needed')
       }
     })
 

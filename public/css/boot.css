@@ -4660,6 +4660,9 @@ ul.meta {
       height: auto;
       margin-right: 10px;
       border-radius: 150px; }
+  ul.meta a {
+    color: #999999;
+    font-weight: bold; }
 
 .post-content {
   padding: 10px 0; }
@@ -4668,7 +4671,9 @@ ul.meta {
   list-style: none;
   padding: 0; }
   .posts-list .post-item {
-    margin-bottom: 20px; }
+    margin-bottom: 20px;
+    padding: 10px;
+    border-bottom: 1px solid #eee; }
 
 .sidebar-col {
   min-height: 400px;
@@ -4705,6 +4710,44 @@ ul.events-widget {
     border-bottom: 1px solid #ddd; }
     ul.events-widget li:last-child {
       margin-bottom: 0; }
+
+.comments {
+  padding-bottom: 40px; }
+  .comments .btn {
+    height: 34px; }
+
+.comment-list {
+  padding-left: 0;
+  padding-top: 5px;
+  list-style: none; }
+  .comment-list > li:nth-child(even) {
+    background: #f5f5f5; }
+
+.comment {
+  padding: 20px 10px 10px 10px;
+  border-bottom: 1px solid #ddd;
+  border-top: none; }
+  .comment > .pull-left {
+    margin-right: 10px; }
+  .comment > .pull-right {
+    margin-left: 10px; }
+
+.comment, .comment-body {
+  overflow: hidden;
+  zoom: 1; }
+
+.comment-body {
+  padding-left: 5px; }
+
+.comment:first-child {
+  margin-top: 0;
+  border-top: 1px solid #ddd; }
+
+.comment-object {
+  display: block; }
+
+.comment-heading {
+  margin: 0 0 5px; }
 
 .events-list {
   list-style: none;
