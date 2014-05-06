@@ -188,14 +188,12 @@ var getStateAbbrviation = function(state) {
       return 'CO'
       break;
   }
-
 }
 
 var groups = {
 
   fetch: function() {
     $.get("http://ipinfo.io", function(response) {
-      console.log(response)
       state = getStateAbbrviation(response.region)
       var request = $.ajax({url: 'http://api.secularconnect.org/cache?type=group&limit=5&q[keys][location.state]=' + state, xhrFields: { withCredentials: false }})
       request.then(function(groups) {

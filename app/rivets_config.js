@@ -99,6 +99,10 @@ rivets.formatters.count = function(arr) {
   return (arr) ? (arr.length || 0) : 0
 }
 
+rivets.formatters.toEagleEyeId = function(id) {
+  return 'http://ui.secularconnect.org/groups/' + id
+}
+
 rivets.formatters.default = function(a, b) {
   return a || b
 }
