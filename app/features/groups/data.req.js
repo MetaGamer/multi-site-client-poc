@@ -191,7 +191,7 @@ var getStateAbbrviation = function(state) {
 
 }
 
-var groups = { comm
+var groups = {
 
   fetch: function() {
     $.get("http://ipinfo.io", function(response) {
