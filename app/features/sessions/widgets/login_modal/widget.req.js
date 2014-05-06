@@ -18,12 +18,11 @@ module.exports = asWidget('login-modal', function(hub) {
     hub.trigger('user:login', user)
   }
 
-  hub.on('user:login:success', function(user) {
-    debugger
+  hub.on('user:loggedIn', function(user) {
+    widget.hide()
   })
 
   hub.on('user:login:error', function(e) {
-    debugger
   })
 
   hub.on('modal:login', widget.show, widget)

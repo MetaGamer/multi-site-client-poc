@@ -9,18 +9,18 @@
           <h4 class="modal-title">Welcome - Register</h4>
         </div>
         <div class="modal-body">
-          <form class="form center-block">
+          <form class="form center-block" rv-on-submit="widget.register | preventDefault">
             <div class="form-group">
               <div class="form-group">
-                <input type="text" class="form-control input-lg" placeholder="Name">
+                <input rv-value="widget.user:name" type="text" class="form-control input-lg" placeholder="Name">
               </div>
-              <input type="text" class="form-control input-lg" placeholder="Email">
+              <input rv-value="widget.user:email" type="text" class="form-control input-lg" placeholder="Email">
             </div>
             <div class="form-group">
-              <input type="password" class="form-control input-lg" placeholder="Password">
+              <input rv-value="widget.user:password" type="password" class="form-control input-lg" placeholder="Password">
             </div>
             <div class="form-group">
-              <button class="btn btn-primary btn-lg btn-block">Register</button>
+              <button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>
             </div>
           </form>
         </div>

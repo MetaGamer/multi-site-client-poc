@@ -11,7 +11,8 @@ window.hub = hub
 $.ajaxSetup({
   xhrFields: {
     withCredentials: true
-  }
+  },
+  crossDomain: true
 })
 
 // keep the hacky comment block below.. Browserify will embed all 

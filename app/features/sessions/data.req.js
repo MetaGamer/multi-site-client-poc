@@ -23,7 +23,7 @@ var session = {
     }).success(function(user) {
       hub.trigger('user:loggedIn', user)
     }).error(function(e) {
-      hub.trigger('user:login:failed', e)
+      hub.trigger('user:login:error', e)
     })
   },
 
@@ -34,6 +34,8 @@ var session = {
       xhrFields: {
         withCredentials: true
       }
+    }).success(function() {
+      hub.trigger('user:login:error')
     })
   }
 }
