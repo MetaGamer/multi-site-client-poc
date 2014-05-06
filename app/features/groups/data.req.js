@@ -194,8 +194,9 @@ var groups = {
 
   fetch: function() {
     $.get("http://ipinfo.io", function(response) {
-      state = getStateAbbrviation(response.region)
-      var request = $.ajax({url: 'http://api.secularconnect.org/cache?type=group&limit=5&q[keys][location.state]=' + state, xhrFields: { withCredentials: false }})
+      console.log(response.loc)
+      geo = response.loc.split(',')
+      var request = $.ajax({url: 'http://api.secularconnect.org/cache?type=group&limit=5&q[geo][]=' + geo[1] + '&q[geo][]=' + geo[0]  + '&q[geo][]=40233.6', xhrFields: { withCredentials: false }})
       request.then(function(groups) {
         cache = groups
         broadcast()
