@@ -35,6 +35,10 @@ var vm = {
     hub.trigger('enable:page', 'events')
     router.navigate('/events')
   },
+   toEvent: function(event) {
+    hub.trigger('enable:page', 'event')
+    router.navigate('/events/' + event['slug'])
+  },
   toArticle: function(article) {
     hub.trigger('enable:page', 'article')
     router.navigate('/articles/' + article.get('slug'))
@@ -52,6 +56,8 @@ var vm = {
 }
 
 hub.on('article:selected', vm.toArticle)
+
+hub.on('event:selected', vm.toEvent)
 
 vm.user.set('loading', true)
 

@@ -9,4 +9,6 @@ module.exports = asWidget('home-page', function(hub) {
   hub.on('enable:page', function(name) {
     (name === 'home') ? widget.start() : widget.stop()
   })
+
+  
 })

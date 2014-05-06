@@ -11,11 +11,11 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">State Name</a>
+          <a class="navbar-brand" rv-on-click="toHome | preventDefault" href="#">State Name</a>
         </div>
 
         <ul class="nav navbar-nav">
-          <li class="active"><a rv-on-click="toHome | preventDefault" href="#">Home</a></li>
+          <li><a rv-on-click="toHome | preventDefault" href="#"><i class="fa fa-fw fa-lg fa-home"></i> </a></li>
           <li><a rv-on-click="toAbout | preventDefault" href="#">About</a></li>
           <li><a rv-on-click="toEvents | preventDefault" href="#">Events</a></li>
         </ul>
@@ -34,6 +34,8 @@
       <div rv-widget data-widget-name="home-page"></div>
       <div rv-widget data-widget-name="events-page"></div>
       <div rv-widget data-widget-name="article-page"></div>
+      <div rv-widget data-widget-name="about-page"></div>
+      <div rv-widget data-widget-name="event-page"></div>
     </div>
 
     <div rv-widget data-widget-name="register-modal"></div>

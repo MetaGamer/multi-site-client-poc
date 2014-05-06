@@ -3,8 +3,8 @@
     <h3><a href="#" rv-on-click="widget.selectArticle | preventDefault">{ post:title }</a></h3>
     <ul class="meta">
       <li><img rv-src="post:author.avatar" /> { post:author.name }</li>
-      <li>{ post:date | prettyDate }</li>
-      <li>{ post:comments | count }</li>
+      <li><i class="fa fa-clock-o"></i> { post:date | prettyDate }</li>
+      <li><i class="fa fa-comments"></i> { post:comments | count }</li>
     </ul>
 	  <p class="post-content" rv-html="post:content"></p>
   </li>

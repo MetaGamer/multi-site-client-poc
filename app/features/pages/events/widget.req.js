@@ -16,6 +16,12 @@ module.exports = asWidget('events-page', function(hub) {
     name == 'events' ? widget.start() : widget.stop()
   })
 
+  widget.selectEvent = function(_, _, binding) {
+    // yuck.
+    var post = binding.view.models.event
+    hub.trigger('event:selected', post)
+  }
+
   hub.on('events:loaded', function(events) {
     widget.set('events', events)
   })

@@ -12,6 +12,13 @@ module.exports = asWidget('events-sidebar', function(hub) {
       widget.start()
     })
 
+    widget.selectEvent = function(_, _, binding) {
+    // yuck.
+    var post = binding.view.models.event
+    hub.trigger('event:selected', post)
+  }
+
+
   hub.on('events:loaded', function(arr) {
     widget.set('events', arr.map(function(e) { return _.extend(e, { venue: e.terms.venue[0].name }) }))
   })

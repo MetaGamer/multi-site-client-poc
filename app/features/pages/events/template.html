@@ -10,9 +10,9 @@
           <p class="day">{ event.date | justMonth }</p>
         </div>
         <div class="col-xs-10 event-details">
-          <a href="#" target="_blank" class="event-title"><h4>{ event.title }</h4></a>
-          <p class="event-date">{ event | eventTime }</p>
-          <p class="event-location">{ event.venue }</p>
+          <a href="#" class="event-title" rv-on-click="widget.selectEvent | preventDefault"><h4>{ event.title }</h4></a>
+          <p class="event-date"><i class="fa fa-clock-o"></i>  { event | eventTime }</p>
+          <p class="event-location"><i class="fa fa-map-marker"></i>  { event.venue }</p>
         </div>
       </div>
       <div class="event-body">
