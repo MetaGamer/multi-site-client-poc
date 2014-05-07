@@ -20,10 +20,8 @@ $.ajaxSetup({
 
 // require all widgets
 
+
 var vm = {
-  site: {
-    title: 'Multi Site POC'
-  },
   toHome: function() {
     hub.trigger('enable:page', 'home')
     router.navigate('/')
@@ -53,7 +51,8 @@ var vm = {
   user: new Backbone.Model,
   logout: function() {
     hub.trigger('user:logout')
-  }
+  },
+  site: new Backbone.Model
 }
 
 hub.on('article:selected', vm.toArticle)
@@ -61,6 +60,12 @@ hub.on('article:selected', vm.toArticle)
 hub.on('event:selected', vm.toEvent)
 
 vm.user.set('loading', true)
+
+hub.trigger('site:needed')
+
+hub.on('site:loaded', function(site) {
+  vm.site.set(site)
+})
 
 hub.trigger('user:check')
 

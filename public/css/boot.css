@@ -5674,7 +5674,7 @@ body {
   border-color: #1F4DC4;
   color: #1F4DC4; }
 
-.navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav > li > a {
+.navbar-inverse .navbar-brand, .nav:ebar-inverse .navbar-nav > li > a {
   color: #fff; }
 
 .navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
