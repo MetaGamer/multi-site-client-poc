@@ -1,8 +1,8 @@
-<div class="widget-title"><a rv-on-click="toEvents | preventDefault" class="title-icon"><i class="fa fa-2x fa-calendar"></i></a></div>
-<ul class="events-widget upcoming">
+<div class="widget-title featured-bg-color"><a rv-on-click="toEvents | preventDefault" class="title-icon featured-color"><i class="fa fa-2x fa-calendar"></i></a></div>
+<ul class="events-widget">
   <li class="row event-item" rv-each-event="widget:events">
     <div class="event-header">
-      <div class="col-xs-2 date-box">
+      <div class="col-xs-2 date-box featured-bg-color">
         <p class="date">{ event.date | justDate }</p>
         <p class="month">{ event.date | justMonth }</p>
       </div>

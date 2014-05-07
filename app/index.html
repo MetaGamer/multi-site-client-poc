@@ -2,6 +2,7 @@
 <html>
 <head>
 <link rel="stylesheet" href="/css/boot.css"></link>
+<style id="style"> .featured-color { color: #3570D8;} .featured-bg-color { background: #3570D8 !important;} .featured-border-color { border-color: #3570D8;}</style>
 </head>
 <body>
   <div id="app">
@@ -9,9 +10,9 @@
     
 
 
-    <div class="page container">
+    <div class="container page featured-border-color">
     
-    <nav class="navbar navbar-inverse row" role="navigation">
+    <nav class="navbar navbar-inverse featured-bg-color row" role="navigation">
         <div class="navbar-header">
           <a class="navbar-brand" rv-on-click="toHome | preventDefault" href="#">{site:name}</a>
         </div>
@@ -28,6 +29,8 @@
           <li rv-show="user:loggedIn"><button class="btn btn-success navbar-btn pull-right" type="button" rv-on-click="logout | preventDefault">Log out</button></li>
         </ul>
     </nav>
+
+    <div class="row hero"><img rv-src="site:group_data.logo"></div>
 
       <div rv-widget data-widget-name="home-page"></div>
       <div rv-widget data-widget-name="events-page"></div>

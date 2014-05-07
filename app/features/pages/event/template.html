@@ -1,14 +1,15 @@
 
-<div class="row hero"> </div>
 
-<div class="row">
+<div class="row article-page">
   <div class="col-xs-10 col-xs-offset-1 main-col">
     <div class="page-header">
       <h2>{ widget:event.title }</h2>
     </div>
     <ul class="meta">
-      <li>{ widget:event.date }</li>
+      <li><img rv-src="widget:post:author.avatar">{ widget:post:author.name }</li>
+      <li><i class="fa fa-clock-o"></i> { widget:event.date | prettyDate }</li>
     </ul>
+    <p class="post-content">{ widget:event.content }</p>
   </div>
 
 </div>

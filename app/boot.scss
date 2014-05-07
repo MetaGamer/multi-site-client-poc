@@ -4,6 +4,7 @@
 
 // GENERAL STYLES
 
+$color-default: #ddd;
 $color-featured: #3570D8;
 $border-color: #1F4DC4;
 
@@ -14,17 +15,16 @@ body {
 .page {
     background: #F5F5F5;
     min-height: 900px;
-    border-bottom: 2px solid $color-featured;
+    border-bottom: 2px solid #888;
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
 .navbar {
 	margin-bottom: 0;
-    background: $color-featured;
-    color: $border-color;
     border-radius: 0;
     border: none;
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid rgba(0,0,0,0.3);
 }
 
 .navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav > li > a {
@@ -43,6 +43,8 @@ body {
 .hero {
 	height: 300px;
 	background: #777;
+    text-align: center;
+    line-height: 250px;
 }
 
 .callout-box {
@@ -96,7 +98,6 @@ body {
         text-align: center;
         padding: 10px 0;
         color: #fff;
-        background: $color-featured;
         max-width: 65px;
     }
     .date {
@@ -160,18 +161,6 @@ body {
     text-align: center;
 }
 
-.upcoming {
-    .date-box {
-        background: $color-featured;
-    }
-}
-
-.past {
-    .date-box {
-        background: #727272;
-    }
-}
-
 
 // POSTS GLOBAL
 
@@ -226,8 +215,7 @@ ul.meta {
 }
 
 .widget-title {
-    background: $color-featured;
-    border-color: $border-color;
+    border-color: rgba(0,0,0,0.3);
     color: #fff;
     display: block;
     width: 100%;
@@ -244,7 +232,6 @@ ul.meta {
         height: 60px;
         line-height: 70px;
         border-radius: 60px;
-        color: $color-featured;
         background: #F5F5F5;
         margin-bottom: -30px;
     }
@@ -300,6 +287,7 @@ ul.events-widget {
 .article-page {
     background: #fff;
     min-height: 700px;
+    margin-bottom: 20px;
 }
 
 .page-header {
@@ -358,6 +346,38 @@ ul.events-widget {
   margin: 0 0 5px;
 }
 
+// About Page 
+
+
+.about-list {
+    list-style: none;
+    max-width: 680px;
+    padding: 0;
+    padding-top: 20px;
+    margin: 0 auto;
+
+    .about-item {
+        @extend .card;
+        margin-bottom: 20px;
+        padding: 0;
+
+        h4 {
+            display: block;
+            width: 100%;
+            padding: 10px 0;
+            text-align: center;
+            color: #fff;
+        }
+
+        .about-data {
+            list-style: none;
+            padding: 10px 20px;
+            margin: 0 auto;
+        }
+    }
+
+    
+}
 
 // Events Page
 

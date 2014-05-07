@@ -65,6 +65,8 @@ hub.trigger('site:needed')
 
 hub.on('site:loaded', function(site) {
   vm.site.set(site)
+  document.getElementById('style').innerText = '.featured-color {color: ' + site.group_data.color + '}' + '.featured-bg-color {background: ' + site.group_data.color + '}' + '.featured-border-color {border-color: ' + site.group_data.color + '}'
+
 })
 
 hub.trigger('user:check')
