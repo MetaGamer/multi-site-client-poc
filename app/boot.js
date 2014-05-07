@@ -24,23 +24,23 @@ $.ajaxSetup({
 var vm = {
   toHome: function() {
     hub.trigger('enable:page', 'home')
-    router.navigate('/')
+    router.navigate('#/')
   },
   toAbout: function() {
     hub.trigger('enable:page', 'about')
-    router.navigate('/about')
+    router.navigate('#/about')
   },
   toEvents: function() {
     hub.trigger('enable:page', 'events')
-    router.navigate('/events')
+    router.navigate('#/events')
   },
    toEvent: function(event) {
     hub.trigger('enable:page', 'event')
-    router.navigate('/events/' + event['slug'])
+    router.navigate('#/events/' + event['slug'])
   },
   toArticle: function(article) {
     hub.trigger('enable:page', 'article')
-    router.navigate('/articles/' + article.get('slug'))
+    router.navigate('#/articles/' + article.get('slug'))
   },
   showLogin: function() {
     hub.trigger('modal:login')
@@ -56,7 +56,6 @@ var vm = {
 }
 
 hub.on('article:selected', vm.toArticle)
-
 hub.on('event:selected', vm.toEvent)
 
 vm.user.set('loading', true)
@@ -84,7 +83,13 @@ rivets.bind(document.getElementById('app'), vm)
 
 var router = new Backbone.Router
 router.route('', 'home', vm.toHome)
-router.route('/events', 'events', vm.toEvents)
-router.route('/about', 'about', vm.toAbout)
-Backbone.history.start({ pushState: true })
+router.route('events', 'events', vm.toEvents)
+router.route('events/:slug', 'event', function(slug) {
+  hub.trigger('event:fromSlug', slug, hub.trigger.bind(hub, 'event:selected'))
+})
+router.route('articles/:slug', 'event', function(slug) {
+  hub.trigger('post:fromSlug', slug, hub.trigger.bind(hub, 'article:selected'))
+})
+router.route('about', 'about', vm.toAbout)
+Backbone.history.start()
 

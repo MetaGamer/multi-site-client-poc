@@ -12,6 +12,12 @@ module.exports = asWidget('article-page', function(hub) {
 
   hub.on('article:selected', function(article) {
     widget.set('post', article)
-    hub.trigger('comments', article.get('comments'))
+    if (article.get('comments')) {
+      hub.trigger('comments', article.get('comments'))
+    } else {
+      article.on('change:comments', function() {
+        hub.trigger('comments', article.get('comments'))
+      })
+    }
   })
 })

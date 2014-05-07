@@ -4,10 +4,12 @@
 <link rel="stylesheet" href="/css/boot.css"></link>
 </head>
 <body>
+
   <div id="app">
 
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
+    <div class="page container">
+
+      <nav class="navbar navbar-inverse row" role="navigation">
         <div class="navbar-header">
           <a class="navbar-brand" rv-on-click="toHome | preventDefault" href="#">{site:name}</a>
         </div>
@@ -23,12 +25,8 @@
           <li rv-hide="user:loggedIn"><a rv-on-click="showRegister | preventDefault" href="#">Register</a></li>
           <li rv-show="user:loggedIn"><button class="btn btn-success navbar-btn pull-right" type="button" rv-on-click="logout | preventDefault">Log out</button></li>
         </ul>
+      </nav>
 
-      </div>
-    </nav>
-
-
-    <div class="page container">
       <div rv-widget data-widget-name="home-page"></div>
       <div rv-widget data-widget-name="events-page"></div>
       <div rv-widget data-widget-name="article-page"></div>
@@ -42,7 +40,7 @@
     <div rv-show="user:loading" id="loading">
       <i class="fa fa-spinner fa-spin"></i>
     </div> 
-    
+
   </div>
 
   <script src="/js/boot.js"></script>
