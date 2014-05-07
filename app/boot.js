@@ -6,6 +6,7 @@ var Backbone = require('backbone')
 var $ = require('jquery')
 Backbone.$ = $
 var hub = require('widget').hub
+var _ = require('lodash')
 window.hub = hub
 
 $.ajaxSetup({
@@ -20,8 +21,14 @@ $.ajaxSetup({
 
 // require all widgets
 
+var View = Backbone.Model.extend({
+  toggleMenu: function() {
+    this.set('menuIn', !this.get('menuIn'))
+  },
+})
 
 var vm = {
+  view: new View({ menuIn: false }),
   toHome: function() {
     hub.trigger('enable:page', 'home')
     router.navigate('#/')
