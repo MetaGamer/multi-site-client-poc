@@ -39,6 +39,14 @@ body {
     background: none;
 }
 
+.navbar-inverse .navbar-toggle {
+    border-color: rgba(255,255,255,0.3);
+}
+
+.navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus {
+    background-color: rgba(0,0,0,0.3);
+}
+
 
 .hero {
 	height: 300px;
@@ -210,7 +218,6 @@ ul.meta {
 }
 
 .sidebar-col {
-	min-height: 400px;
 	padding: 0;
 }
 
@@ -287,7 +294,6 @@ ul.events-widget {
 .article-page {
     background: #fff;
     min-height: 700px;
-    margin-bottom: 20px;
 }
 
 .page-header {

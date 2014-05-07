@@ -14,20 +14,28 @@
     
     <nav class="navbar navbar-inverse featured-bg-color row" role="navigation">
         <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
           <a class="navbar-brand" rv-on-click="toHome | preventDefault" href="#">{site:name}</a>
         </div>
 
-        <ul class="nav navbar-nav">
-          <li><a rv-on-click="toHome | preventDefault" href="#"><i class="fa fa-fw fa-lg fa-home"></i> </a></li>
-          <li><a rv-on-click="toAbout | preventDefault" href="#">About</a></li>
-          <li><a rv-on-click="toEvents | preventDefault" href="#">Events</a></li>
-        </ul>
+         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a rv-on-click="toHome | preventDefault" href="#"><i class="fa fa-fw fa-lg fa-home"></i> </a></li>
+            <li><a rv-on-click="toAbout | preventDefault" href="#">About</a></li>
+            <li><a rv-on-click="toEvents | preventDefault" href="#">Events</a></li>
+          </ul>
 
-        <ul class="nav navbar-nav navbar-right">
-          <li rv-hide="user:loggedIn"><button type="button" rv-on-click="showLogin | preventDefault" class="btn btn-success navbar-btn pull-right">Log in</button></li>
-          <li rv-hide="user:loggedIn"><a rv-on-click="showRegister | preventDefault" href="#">Register</a></li>
-          <li rv-show="user:loggedIn"><button class="btn btn-success navbar-btn pull-right" type="button" rv-on-click="logout | preventDefault">Log out</button></li>
-        </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li rv-hide="user:loggedIn"><button type="button" rv-on-click="showLogin | preventDefault" class="btn btn-success navbar-btn pull-right">Log in</button></li>
+            <li rv-hide="user:loggedIn"><a rv-on-click="showRegister | preventDefault" href="#">Register</a></li>
+            <li rv-show="user:loggedIn"><button class="btn btn-success navbar-btn pull-right" type="button" rv-on-click="logout | preventDefault">Log out</button></li>
+          </ul>
+        </div>
     </nav>
 
     <div class="row hero"><img rv-src="site:group_data.logo"></div>
